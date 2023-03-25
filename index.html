@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>create by 
+        AI tool
+    </title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      canvas {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      }
+     
+
+
+    body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  background-color: #f2f2f2;
+}
+h2{
+ display: flex;
+}
+.card {
+  background-color: rgba(0, 0, 255, 0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 50px auto;
+  width: 90%;
+  max-width: 600px;
+  color: #070606;
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 24px;
+}
+
+.notice-board {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.notice-item {
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out;
+}
+
+.notice-item:hover {
+  transform: scale(1.05);
+}
+
+.notice-date {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.notice-text {
+  margin: 5px 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.edit-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background-color: #0062cc;
+}
+
+.editable .notice-text {
+  border: 2px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.editable .edit-button {
+  display: none;
+}
+
+.editable .save-button {
+  display: inline-block;
+  background-color: #28a745;
+}
+
+.editable .save-button:hover {
+  background-color: #218838;
+}
+
+@media only screen and (max-width: 768px) {
+  .notice-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .notice-text {
+    margin-right: 0;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  .edit-button {
+    margin-left: auto;
+  }
+}
+
+      
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <div class="card">
+        
+        <h2>Notice Board </h2>
+        <div class="notice-board">
+          <div class="notice-item">
+            <span class="notice-date">March 24, 2023</span>
+            <p class="notice-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dapibus, nibh non auctor mattis, arcu nulla mollis lorem, quis facilisis erat eros et mi.</p>
+            <button class="edit-button">Edit</button>
+        </div>
+          <div class="notice-item">
+            <span class="notice-date">March 23, 2023</span>
+            <p class="notice-text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            <button class="edit-button">Edit</button>
+        </div>
+          <div class="notice-item">
+            <span class="notice-date">March 22, 2023</span>
+            <p class="notice-text">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <button class="edit-button">Edit</button>
+        </div>
+        </div>
+      </div>
+    <script >
+        const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+let width = window.innerWidth;
+let height = window.innerHeight;
+canvas.width = width;
+canvas.height = height;
+
+let particles = [];
+let particleCount = 100;
+
+class Particle {
+  constructor(x, y, radius, color) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    this.speedX = Math.random() * 4 - 2;
+    this.speedY = Math.random() * 4 - 2;
+  }
+  
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
+  
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    
+    if (this.x + this.radius > width || this.x - this.radius < 0) {
+      this.speedX = -this.speedX;
+    }
+    
+    if (this.y + this.radius > height || this.y - this.radius < 0) {
+      this.speedY = -this.speedY;
+    }
+    
+    this.draw();
+  }
+}
+
+function init() {
+  for (let i = 0; i < particleCount; i++) {
+    let radius = Math.random() * 20 + 5;
+    let x = Math.random() * (width - radius * 2) + radius;
+    let y = Math.random() * (height - radius * 2) + radius;
+    let color = `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`;
+    
+    particles.push(new Particle(x, y, radius, color));
+  }
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  
+  ctx.clearRect(0, 0, width, height);
+  
+  for (let i = 0; i < particles.length; i++) {
+    particles[i].update();
+  }
+}
+
+init();
+animate();
+const noticeItems = document.querySelectorAll('.notice-item');
+
+noticeItems.forEach((item) => {
+  item.addEventListener('click', () => {
+    item.classList.toggle('active');
+  });
+});
+
+   // Get all the edit buttons and add event listener
+   let editButtons = document.querySelectorAll(".edit-button");
+editButtons.forEach(button => {
+  button.addEventListener("click", function() {
+    let noticeItem = button.parentElement;
+    let noticeText = noticeItem.querySelector(".notice-text");
+    let newText = prompt("Enter new text:", noticeText.innerText);
+    if (newText !== null && newText !== "") {
+      noticeText.innerText = newText;
+    }
+  });
+});
+
+// Get all the update buttons and add event listener
+let updateButtons = document.querySelectorAll(".update-button");
+updateButtons.forEach(button => {
+  button.addEventListener("click", function() {
+    let isAdmin = confirm("Are you an admin?");
+    if (isAdmin) {
+      alert("Updating notice...");
+      // Code to update notice on server would go here
+    } else {
+      alert("Only admins can update notices.");
+    }
+  });
+});
+
+    </script>
+  </body>
+</html>
